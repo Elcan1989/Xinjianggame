@@ -590,6 +590,19 @@
         const node = nodes[nodeKey];
         currentNode = nodeKey;
 
+        const portraitEl = document.querySelector('.portrait');
+        if (node.speaker === "張教官") {
+          portraitEl.style.left = "20px";
+          portraitEl.style.right = "auto";
+        } else if (node.speaker === "旁白") {
+          portraitEl.style.right = "20px";
+          portraitEl.style.left = "auto";
+        } else {
+          // 其他角色（如守護者、旅人）預設靠左
+          portraitEl.style.left = "20px";
+          portraitEl.style.right = "auto";
+        }
+
         speakerEl.textContent = node.speaker;
         dialogueEl.textContent = node.text;
         moodEl.textContent = node.mood;
