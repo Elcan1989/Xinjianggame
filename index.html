@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>山海之約：對話遊戲</title>
+    <title>新疆勞改營：對話遊戲</title>
     <style>
       :root {
         color-scheme: light;
@@ -272,9 +272,9 @@
       <section class="stage">
         <div class="stage__header">
           <p class="stage__tag">文字冒險 · 對話遊戲</p>
-          <h1 class="stage__title">山海之約：旅人的對話試煉</h1>
+          <h1 class="stage__title">新疆勞改營：進入勞改營</h1>
           <p class="stage__intro">
-            你在夜色中穿越山林，一盞燈火指引你前往古老的祠堂。透過回答守護者的問題，開啟新的旅程。
+            你犯下了罪過，進入了新疆勞改營，你要發揮你的智商，安全的活下來。
           </p>
         </div>
         <div class="stage__image">
@@ -282,9 +282,9 @@
         </div>
         <div class="stage__meta">
           <span>目前場景</span>
-          <strong id="location">祠堂前廊</strong>
+          <strong id="location">勞改營入口</strong>
           <span>氛圍</span>
-          <strong id="mood">靜謐</strong>
+          <strong id="mood">嚴肅</strong>
         </div>
       </section>
 
@@ -342,11 +342,11 @@
         start: {
           speaker: "守護者",
           text: "歡迎你，旅人。請說出你此行的目的。",
-          mood: "靜謐",
-          location: "祠堂前廊",
+          mood: "嚴肅",
+          location: "勞改營入口",
           trustDelta: 0,
           background: "radial-gradient(circle at top, rgba(15, 23, 42, 0.6), rgba(2, 6, 23, 0.95)), linear-gradient(120deg, #1e293b, #0f172a)",
-          sceneImage: buildSvgData("夜色祠堂", "#1e293b", "#0f172a"),
+          sceneImage: buildSvgData("勞改營入口", "#1e293b", "#0f172a"),
           choices: [
             { text: "尋找失落的古書", next: "book" },
             { text: "保護村莊免於災厄", next: "village" },
