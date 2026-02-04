@@ -20,71 +20,163 @@
         margin: 0;
         min-height: 100vh;
         display: flex;
-        align-items: flex-end;
-        justify-content: center;
-        background: radial-gradient(circle at top, #1e293b, #0f172a 60%, #020617);
-        padding: 32px;
+        background: var(--scene-background, #0f172a);
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        transition: background 0.6s ease;
       }
 
       .game {
-        width: min(960px, 100%);
-        background: rgba(15, 23, 42, 0.85);
-        border: 1px solid rgba(148, 163, 184, 0.2);
-        border-radius: 20px;
-        box-shadow: 0 30px 60px rgba(2, 6, 23, 0.5);
-        padding: 32px;
+        width: 100%;
+        min-height: 100vh;
         display: grid;
+        grid-template-rows: 1fr auto;
         gap: 24px;
-        margin-bottom: 24px;
+        padding: 32px;
+        backdrop-filter: blur(2px);
       }
 
-      .game__header h1 {
-        margin: 8px 0 12px;
-        font-size: clamp(1.6rem, 2vw + 1rem, 2.6rem);
-        color: #f8fafc;
+      .stage {
+        position: relative;
+        display: grid;
+        place-items: center;
+        border-radius: 24px;
+        padding: 32px;
+        background: rgba(15, 23, 42, 0.3);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        overflow: hidden;
       }
 
-      .game__tag {
+      .stage__header {
+        position: absolute;
+        top: 24px;
+        left: 24px;
+        display: grid;
+        gap: 8px;
+        max-width: 380px;
+        background: rgba(15, 23, 42, 0.7);
+        padding: 16px 20px;
+        border-radius: 16px;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+      }
+
+      .stage__tag {
         text-transform: uppercase;
-        letter-spacing: 0.2em;
-        font-size: 0.75rem;
+        letter-spacing: 0.22em;
+        font-size: 0.7rem;
         color: #a5b4fc;
         margin: 0;
       }
 
-      .game__intro {
+      .stage__title {
         margin: 0;
-        line-height: 1.7;
+        font-size: clamp(1.4rem, 2.2vw + 1rem, 2.3rem);
+        color: #f8fafc;
+      }
+
+      .stage__intro {
+        margin: 0;
+        line-height: 1.6;
         color: #cbd5f5;
       }
 
-      .game__panel {
-        background: rgba(30, 41, 59, 0.6);
-        border-radius: 16px;
-        padding: 24px;
+      .stage__image {
+        width: min(520px, 70vw);
+        aspect-ratio: 4 / 3;
+        border-radius: 28px;
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        box-shadow: 0 30px 60px rgba(2, 6, 23, 0.55);
+        overflow: hidden;
+        background: rgba(15, 23, 42, 0.5);
         display: grid;
-        gap: 20px;
+        place-items: center;
       }
 
-      .game__scene {
+      .stage__image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .stage__meta {
+        position: absolute;
+        right: 24px;
+        top: 24px;
+        background: rgba(15, 23, 42, 0.7);
+        border-radius: 16px;
+        padding: 14px 18px;
+        display: grid;
+        gap: 6px;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        min-width: 160px;
+      }
+
+      .stage__meta span {
+        font-size: 0.8rem;
+        color: #94a3b8;
+      }
+
+      .stage__meta strong {
+        font-size: 1rem;
+        color: #f8fafc;
+      }
+
+      .dialogue-bar {
+        width: 100%;
+        background: rgba(15, 23, 42, 0.92);
+        border-radius: 20px 20px 0 0;
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        padding: 24px 32px;
+        display: grid;
+        gap: 18px;
+      }
+
+      .dialogue-bar__row {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 20px;
+        align-items: center;
+      }
+
+      .portrait {
+        width: 84px;
+        height: 84px;
+        border-radius: 24px;
+        border: 2px solid rgba(148, 163, 184, 0.4);
+        overflow: hidden;
+        box-shadow: 0 12px 24px rgba(2, 6, 23, 0.4);
+        background: rgba(30, 41, 59, 0.6);
+      }
+
+      .portrait img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .dialogue-bar__text {
         display: grid;
         gap: 8px;
       }
 
-      .game__speaker {
+      .dialogue-bar__speaker {
+        margin: 0;
         font-weight: 700;
         color: #fbbf24;
-        margin: 0;
+        font-size: 1.1rem;
       }
 
-      .game__dialogue {
+      .dialogue-bar__line {
         margin: 0;
         font-size: 1.1rem;
-        line-height: 1.6;
+        line-height: 1.7;
+        color: #e2e8f0;
       }
 
-      .game__choices {
-        display: grid;
+      .dialogue-bar__choices {
+        display: flex;
+        flex-wrap: wrap;
         gap: 12px;
       }
 
@@ -117,82 +209,144 @@
         box-shadow: 0 8px 16px rgba(148, 163, 184, 0.2);
       }
 
-      .game__status {
+      .dialogue-bar__footer {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
         gap: 16px;
-        background: rgba(15, 23, 42, 0.7);
+        background: rgba(2, 6, 23, 0.45);
         border-radius: 14px;
-        padding: 16px 20px;
+        padding: 12px 16px;
       }
 
-      .game__status .label {
+      .dialogue-bar__footer .label {
         font-size: 0.85rem;
         color: #94a3b8;
         margin-right: 8px;
       }
 
-      .game__status .value {
+      .dialogue-bar__footer .value {
         font-weight: 700;
         color: #f8fafc;
       }
 
-      @media (max-width: 600px) {
-        body {
+      @media (max-width: 900px) {
+        .game {
           padding: 20px;
         }
 
-        .game {
-          padding: 24px;
+        .stage__header,
+        .stage__meta {
+          position: static;
+          max-width: 100%;
         }
 
-        .game__status {
-          flex-direction: column;
-          align-items: flex-start;
+        .stage {
+          gap: 20px;
+        }
+
+        .stage__image {
+          width: min(520px, 90vw);
+        }
+
+        .dialogue-bar__row {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .dialogue-bar {
+          padding: 20px;
+        }
+
+        .portrait {
+          width: 72px;
+          height: 72px;
         }
       }
     </style>
   </head>
   <body>
     <main class="game">
-      <header class="game__header">
-        <p class="game__tag">文字冒險 · 對話遊戲</p>
-        <h1>山海之約：旅人的對話試煉</h1>
-        <p class="game__intro">
-          你在夜色中穿越山林，一盞燈火指引你前往古老的祠堂。透過回答守護者的問題，開啟新的旅程。
-        </p>
-      </header>
-
-      <section class="game__panel">
-        <div class="game__scene">
-          <p class="game__speaker" id="speaker">守護者</p>
-          <p class="game__dialogue" id="dialogue">歡迎你，旅人。請說出你此行的目的。</p>
+      <section class="stage">
+        <div class="stage__header">
+          <p class="stage__tag">文字冒險 · 對話遊戲</p>
+          <h1 class="stage__title">山海之約：旅人的對話試煉</h1>
+          <p class="stage__intro">
+            你在夜色中穿越山林，一盞燈火指引你前往古老的祠堂。透過回答守護者的問題，開啟新的旅程。
+          </p>
         </div>
-        <div class="game__choices" id="choices"></div>
+        <div class="stage__image">
+          <img id="scene-image" alt="場景示意" />
+        </div>
+        <div class="stage__meta">
+          <span>目前場景</span>
+          <strong id="location">祠堂前廊</strong>
+          <span>氛圍</span>
+          <strong id="mood">靜謐</strong>
+        </div>
       </section>
 
-      <section class="game__status">
-        <div>
-          <span class="label">氛圍</span>
-          <span id="mood" class="value">靜謐</span>
+      <section class="dialogue-bar">
+        <div class="dialogue-bar__row">
+          <div class="portrait">
+            <img id="speaker-image" alt="說話者" />
+          </div>
+          <div class="dialogue-bar__text">
+            <p class="dialogue-bar__speaker" id="speaker">守護者</p>
+            <p class="dialogue-bar__line" id="dialogue">歡迎你，旅人。請說出你此行的目的。</p>
+          </div>
         </div>
-        <div>
-          <span class="label">信任</span>
-          <span id="trust" class="value">3</span>
+        <div class="dialogue-bar__choices" id="choices"></div>
+        <div class="dialogue-bar__footer">
+          <div>
+            <span class="label">信任</span>
+            <span id="trust" class="value">3</span>
+          </div>
+          <button id="restart" class="button button--ghost">重新開始</button>
         </div>
-        <button id="restart" class="button button--ghost">重新開始</button>
       </section>
     </main>
 
     <script>
+            const buildSvgData = (label, background, accent) => {
+        const svg = `\n          <svg xmlns="http://www.w3.org/2000/svg" width="600" height="450" viewBox="0 0 600 450">\n            <defs>\n              <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">\n                <stop offset="0%" stop-color="${background}" />\n                <stop offset="100%" stop-color="${accent}" />\n              </linearGradient>\n            </defs>\n            <rect width="600" height="450" fill="url(#bg)" rx="36" />\n            <g opacity="0.2">\n              <circle cx="480" cy="120" r="90" fill="#ffffff" />\n              <circle cx="130" cy="340" r="70" fill="#ffffff" />\n            </g>\n            <text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-size="46" font-family="'Noto Sans TC', sans-serif" font-weight="700">\n              ${label}\n            </text>\n          </svg>`;
+        return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+      };
+
+      const buildPortrait = (label, background, accent) => {
+        const svg = `\n          <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">\n            <defs>\n              <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">\n                <stop offset="0%" stop-color="${background}" />\n                <stop offset="100%" stop-color="${accent}" />\n              </linearGradient>\n            </defs>\n            <rect width="200" height="200" rx="40" fill="url(#bg)" />\n            <circle cx="100" cy="80" r="40" fill="rgba(255,255,255,0.75)" />\n            <rect x="45" y="120" width="110" height="60" rx="30" fill="rgba(255,255,255,0.55)" />\n            <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#1e293b" font-size="36" font-family="'Noto Sans TC', sans-serif" font-weight="700">\n              ${label}\n            </text>\n          </svg>`;
+        return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+      };
+
+      const speakerProfiles = {
+        守護者: {
+          label: "守",
+          background: "#f59e0b",
+          accent: "#ef4444",
+        },
+        旁白: {
+          label: "述",
+          background: "#60a5fa",
+          accent: "#38bdf8",
+        },
+        旅人: {
+          label: "旅",
+          background: "#34d399",
+          accent: "#22c55e",
+        },
+      };
+
       const nodes = {
         start: {
           speaker: "守護者",
           text: "歡迎你，旅人。請說出你此行的目的。",
           mood: "靜謐",
+          location: "祠堂前廊",
           trustDelta: 0,
+          background: "radial-gradient(circle at top, rgba(15, 23, 42, 0.6), rgba(2, 6, 23, 0.95)), linear-gradient(120deg, #1e293b, #0f172a)",
+          sceneImage: buildSvgData("夜色祠堂", "#1e293b", "#0f172a"),
           choices: [
             { text: "尋找失落的古書", next: "book" },
             { text: "保護村莊免於災厄", next: "village" },
@@ -203,7 +357,10 @@
           speaker: "守護者",
           text: "古書藏於霧中，你願以何種心意交換？",
           mood: "神秘",
+          location: "霧森書庫",
           trustDelta: 1,
+          background: "radial-gradient(circle at 20% 20%, rgba(15, 118, 110, 0.6), rgba(15, 23, 42, 0.9)), linear-gradient(120deg, #0f766e, #1e293b)",
+          sceneImage: buildSvgData("霧中書庫", "#0f766e", "#1e293b"),
           choices: [
             { text: "分享我一路聽到的故事", next: "story" },
             { text: "承諾守護此地", next: "oath" },
@@ -213,7 +370,10 @@
           speaker: "守護者",
           text: "災厄源自人心。你願意先與村民對話嗎？",
           mood: "警醒",
+          location: "村落集市",
           trustDelta: 0,
+          background: "radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.45), rgba(15, 23, 42, 0.9)), linear-gradient(135deg, #b45309, #1e293b)",
+          sceneImage: buildSvgData("晨光村落", "#b45309", "#1e293b"),
           choices: [
             { text: "願意，從他們的話中尋找答案", next: "listen" },
             { text: "不，我將直面災厄的核心", next: "challenge" },
@@ -223,7 +383,10 @@
           speaker: "守護者",
           text: "旅途艱辛，休息亦是智慧。但你是否能分享一段記憶？",
           mood: "溫柔",
+          location: "山谷驛站",
           trustDelta: 0,
+          background: "radial-gradient(circle at 40% 30%, rgba(94, 234, 212, 0.4), rgba(2, 6, 23, 0.9)), linear-gradient(140deg, #0f172a, #0891b2)",
+          sceneImage: buildSvgData("靜謐驛站", "#0891b2", "#0f172a"),
           choices: [
             { text: "說出家鄉的味道", next: "memory" },
             { text: "保持沉默", next: "silence" },
@@ -233,84 +396,120 @@
           speaker: "守護者",
           text: "故事令人心安。古書願意與你同行，但必須持續學習。",
           mood: "溫暖",
+          location: "古書密室",
           trustDelta: 1,
+          background: "radial-gradient(circle at 70% 20%, rgba(251, 191, 36, 0.35), rgba(30, 41, 59, 0.9)), linear-gradient(130deg, #92400e, #1e293b)",
+          sceneImage: buildSvgData("密室燭火", "#92400e", "#1e293b"),
           choices: [{ text: "接受試煉", next: "endingHope" }],
         },
         oath: {
           speaker: "守護者",
           text: "承諾有重量。若你守信，山海皆為友。",
           mood: "莊嚴",
+          location: "誓言石台",
           trustDelta: 2,
+          background: "radial-gradient(circle at 50% 10%, rgba(148, 163, 184, 0.4), rgba(15, 23, 42, 0.95)), linear-gradient(160deg, #334155, #0f172a)",
+          sceneImage: buildSvgData("誓言石台", "#334155", "#0f172a"),
           choices: [{ text: "立誓守護", next: "endingOath" }],
         },
         listen: {
           speaker: "守護者",
           text: "你願聆聽，災厄便會減弱。去吧，從話語中尋光。",
           mood: "平靜",
+          location: "村民長屋",
           trustDelta: 1,
+          background: "radial-gradient(circle at 20% 80%, rgba(56, 189, 248, 0.35), rgba(2, 6, 23, 0.95)), linear-gradient(120deg, #0ea5e9, #0f172a)",
+          sceneImage: buildSvgData("長屋燈火", "#0ea5e9", "#0f172a"),
           choices: [{ text: "踏上調查之路", next: "endingListen" }],
         },
         challenge: {
           speaker: "守護者",
           text: "你的勇氣可嘉，但也需謀略。先取此符護身。",
           mood: "激昂",
+          location: "風暴谷",
           trustDelta: -1,
+          background: "radial-gradient(circle at 80% 70%, rgba(244, 63, 94, 0.35), rgba(15, 23, 42, 0.95)), linear-gradient(150deg, #7f1d1d, #0f172a)",
+          sceneImage: buildSvgData("風暴谷", "#7f1d1d", "#0f172a"),
           choices: [{ text: "接下護符", next: "endingBrave" }],
         },
         memory: {
           speaker: "守護者",
           text: "記憶使人不孤單。你將在此獲得片刻安寧。",
           mood: "柔和",
+          location: "溪畔營地",
           trustDelta: 1,
+          background: "radial-gradient(circle at 30% 20%, rgba(52, 211, 153, 0.4), rgba(15, 23, 42, 0.95)), linear-gradient(120deg, #047857, #0f172a)",
+          sceneImage: buildSvgData("溪畔營地", "#047857", "#0f172a"),
           choices: [{ text: "安心休息", next: "endingRest" }],
         },
         silence: {
           speaker: "守護者",
           text: "沉默也是答案。你可以留下，但需更久才能前行。",
           mood: "凝重",
+          location: "靜默廊下",
           trustDelta: -1,
+          background: "radial-gradient(circle at 60% 30%, rgba(148, 163, 184, 0.3), rgba(2, 6, 23, 0.95)), linear-gradient(130deg, #1e293b, #020617)",
+          sceneImage: buildSvgData("靜默廊下", "#1e293b", "#020617"),
           choices: [{ text: "留宿一晚", next: "endingWait" }],
         },
         endingHope: {
           speaker: "旁白",
           text: "你帶著古書踏出祠堂，夜色如同新的篇章在你腳下展開。",
           mood: "希望",
+          location: "月光山徑",
           trustDelta: 0,
+          background: "radial-gradient(circle at 40% 20%, rgba(165, 180, 252, 0.4), rgba(2, 6, 23, 0.95)), linear-gradient(120deg, #4338ca, #0f172a)",
+          sceneImage: buildSvgData("月光山徑", "#4338ca", "#0f172a"),
           choices: [{ text: "重新開始", next: "start" }],
         },
         endingOath: {
           speaker: "旁白",
           text: "你的誓言成為山海的回聲，旅程從此不再孤單。",
           mood: "崇敬",
+          location: "回聲峽谷",
           trustDelta: 0,
+          background: "radial-gradient(circle at 70% 20%, rgba(147, 197, 253, 0.35), rgba(15, 23, 42, 0.95)), linear-gradient(150deg, #1d4ed8, #0f172a)",
+          sceneImage: buildSvgData("回聲峽谷", "#1d4ed8", "#0f172a"),
           choices: [{ text: "重新開始", next: "start" }],
         },
         endingListen: {
           speaker: "旁白",
           text: "村民的故事為你指引方向，災厄的陰影逐漸消散。",
           mood: "安心",
+          location: "林間小徑",
           trustDelta: 0,
+          background: "radial-gradient(circle at 30% 70%, rgba(110, 231, 183, 0.35), rgba(15, 23, 42, 0.95)), linear-gradient(120deg, #059669, #0f172a)",
+          sceneImage: buildSvgData("林間小徑", "#059669", "#0f172a"),
           choices: [{ text: "重新開始", next: "start" }],
         },
         endingBrave: {
           speaker: "旁白",
           text: "你高舉護符，直面風暴。新的考驗正等待著你。",
           mood: "勇毅",
+          location: "戰鼓崖",
           trustDelta: 0,
+          background: "radial-gradient(circle at 60% 20%, rgba(248, 113, 113, 0.35), rgba(15, 23, 42, 0.95)), linear-gradient(140deg, #991b1b, #0f172a)",
+          sceneImage: buildSvgData("戰鼓崖", "#991b1b", "#0f172a"),
           choices: [{ text: "重新開始", next: "start" }],
         },
         endingRest: {
           speaker: "旁白",
           text: "黎明前的休息讓你重拾力量，旅途變得更加清晰。",
           mood: "舒緩",
+          location: "薄霧原野",
           trustDelta: 0,
+          background: "radial-gradient(circle at 20% 20%, rgba(251, 207, 232, 0.35), rgba(15, 23, 42, 0.95)), linear-gradient(130deg, #be185d, #0f172a)",
+          sceneImage: buildSvgData("薄霧原野", "#be185d", "#0f172a"),
           choices: [{ text: "重新開始", next: "start" }],
         },
         endingWait: {
           speaker: "旁白",
           text: "夜風從門縫穿過，提醒你前路尚遠。你終於起身繼續前行。",
           mood: "沉靜",
+          location: "夜行石階",
           trustDelta: 0,
+          background: "radial-gradient(circle at 80% 20%, rgba(148, 163, 184, 0.3), rgba(2, 6, 23, 0.95)), linear-gradient(120deg, #0f172a, #1e293b)",
+          sceneImage: buildSvgData("夜行石階", "#0f172a", "#1e293b"),
           choices: [{ text: "重新開始", next: "start" }],
         },
       };
@@ -321,9 +520,20 @@
       const moodEl = document.getElementById("mood");
       const trustEl = document.getElementById("trust");
       const restartButton = document.getElementById("restart");
+      const sceneImageEl = document.getElementById("scene-image");
+      const speakerImageEl = document.getElementById("speaker-image");
+      const locationEl = document.getElementById("location");
 
       let trust = 3;
       let currentNode = "start";
+
+      const getSpeakerProfile = (name) => {
+        return speakerProfiles[name] || {
+          label: name.slice(0, 1),
+          background: "#94a3b8",
+          accent: "#475569",
+        };
+      };
 
       const renderNode = (nodeKey) => {
         const node = nodes[nodeKey];
@@ -332,9 +542,17 @@
         speakerEl.textContent = node.speaker;
         dialogueEl.textContent = node.text;
         moodEl.textContent = node.mood;
+        locationEl.textContent = node.location;
 
         trust = Math.max(0, trust + node.trustDelta);
         trustEl.textContent = String(trust);
+
+        document.body.style.setProperty("--scene-background", node.background);
+        sceneImageEl.src = node.sceneImage;
+
+        const profile = getSpeakerProfile(node.speaker);
+        speakerImageEl.src = buildPortrait(profile.label, profile.background, profile.accent);
+        speakerImageEl.alt = `${node.speaker} 頭像`;
 
         choicesEl.innerHTML = "";
         node.choices.forEach((choice) => {
