@@ -392,10 +392,22 @@
         },
         speaklittle: {
           speaker: "張教官",
-          text: "念大聲一點拉，我一個人都比你們念的大聲了，我再給你們一次機會",
+          text: "念大聲一點拉，我一個人都比你們念的大聲了。",
           mood: "嚴肅",
           location: "勞改營入口",
           trustDelta: -1,
+          background: "radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.45), rgba(15, 23, 42, 0.9)), linear-gradient(135deg, #b45309, #1e293b)",
+          sceneImage: buildSvgData("勞改營入口", "#b45309", "#1e293b"),
+          choices: [
+            { text: "下一句", next: "next3" },
+          ],
+        },
+        next3: {
+          speaker: "張教官",
+          text: "我再給你們一次機會",
+          mood: "嚴肅",
+          location: "勞改營入口",
+          trustDelta: 0,
           background: "radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.45), rgba(15, 23, 42, 0.9)), linear-gradient(135deg, #b45309, #1e293b)",
           sceneImage: buildSvgData("勞改營入口", "#b45309", "#1e293b"),
           choices: [
@@ -408,15 +420,14 @@
           text: "還嫌我不夠兇嗎，第一天進來就要造反嗎?",
           mood: "嚴肅",
           location: "勞改營入口",
-          trustDelta: 0,
+          trustDelta: -1,
           background: "radial-gradient(circle at 40% 30%, rgba(178, 8, 8, 0.4), rgba(42, 15, 15, 0.9)), linear-gradient(140deg, #2a0f0f, #b20808)",
           sceneImage: buildSvgData("勞改營入口", "#b20808", "#2a0f0f"),
           choices: [
-            { text: "說出家鄉的味道", next: "memory" },
-            { text: "保持沉默", next: "silence" },
+            { text: "下一句", next: "next3" },
           ],
         },
-        story: {
+        story1: {
           speaker: "守護者",
           text: "故事令人心安。古書願意與你同行，但必須持續學習。",
           mood: "溫暖",
