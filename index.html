@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>山海之約：對話遊戲</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at top, #1e293b, #0f172a 60%, #020617);
+        padding: 32px;
+      }
+
+      .game {
+        width: min(960px, 100%);
+        background: rgba(15, 23, 42, 0.85);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 20px;
+        box-shadow: 0 30px 60px rgba(2, 6, 23, 0.5);
+        padding: 32px;
+        display: grid;
+        gap: 24px;
+      }
+
+      .game__header h1 {
+        margin: 8px 0 12px;
+        font-size: clamp(1.6rem, 2vw + 1rem, 2.6rem);
+        color: #f8fafc;
+      }
+
+      .game__tag {
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-size: 0.75rem;
+        color: #a5b4fc;
+        margin: 0;
+      }
+
+      .game__intro {
+        margin: 0;
+        line-height: 1.7;
+        color: #cbd5f5;
+      }
+
+      .game__panel {
+        background: rgba(30, 41, 59, 0.6);
+        border-radius: 16px;
+        padding: 24px;
+        display: grid;
+        gap: 20px;
+      }
+
+      .game__scene {
+        display: grid;
+        gap: 8px;
+      }
+
+      .game__speaker {
+        font-weight: 700;
+        color: #fbbf24;
+        margin: 0;
+      }
+
+      .game__dialogue {
+        margin: 0;
+        font-size: 1.1rem;
+        line-height: 1.6;
+      }
+
+      .game__choices {
+        display: grid;
+        gap: 12px;
+      }
+
+      .button {
+        border: none;
+        border-radius: 999px;
+        padding: 12px 20px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        background: #6366f1;
+        color: #f8fafc;
+        box-shadow: 0 10px 20px rgba(79, 70, 229, 0.25);
+      }
+
+      .button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 24px rgba(79, 70, 229, 0.35);
+      }
+
+      .button--ghost {
+        background: transparent;
+        border: 1px solid rgba(148, 163, 184, 0.4);
+        color: #e2e8f0;
+        box-shadow: none;
+      }
+
+      .button--ghost:hover {
+        box-shadow: 0 8px 16px rgba(148, 163, 184, 0.2);
+      }
+
+      .game__status {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        background: rgba(15, 23, 42, 0.7);
+        border-radius: 14px;
+        padding: 16px 20px;
+      }
+
+      .game__status .label {
+        font-size: 0.85rem;
+        color: #94a3b8;
+        margin-right: 8px;
+      }
+
+      .game__status .value {
+        font-weight: 700;
+        color: #f8fafc;
+      }
+
+      @media (max-width: 600px) {
+        body {
+          padding: 20px;
+        }
+
+        .game {
+          padding: 24px;
+        }
+
+        .game__status {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="game">
+      <header class="game__header">
+        <p class="game__tag">文字冒險 · 對話遊戲</p>
+        <h1>山海之約：旅人的對話試煉</h1>
+        <p class="game__intro">
+          你在夜色中穿越山林，一盞燈火指引你前往古老的祠堂。透過回答守護者的問題，開啟新的旅程。
+        </p>
+      </header>
+
+      <section class="game__panel">
+        <div class="game__scene">
+          <p class="game__speaker" id="speaker">守護者</p>
+          <p class="game__dialogue" id="dialogue">歡迎你，旅人。請說出你此行的目的。</p>
+        </div>
+        <div class="game__choices" id="choices"></div>
+      </section>
+
+      <section class="game__status">
+        <div>
+          <span class="label">氛圍</span>
+          <span id="mood" class="value">靜謐</span>
+        </div>
+        <div>
+          <span class="label">信任</span>
+          <span id="trust" class="value">3</span>
+        </div>
+        <button id="restart" class="button button--ghost">重新開始</button>
+      </section>
+    </main>
+
+    <script>
+      const nodes = {
+        start: {
+          speaker: "守護者",
+          text: "歡迎你，旅人。請說出你此行的目的。",
+          mood: "靜謐",
+          trustDelta: 0,
+          choices: [
+            { text: "尋找失落的古書", next: "book" },
+            { text: "保護村莊免於災厄", next: "village" },
+            { text: "只想找一處歇腳", next: "rest" },
+          ],
+        },
+        book: {
+          speaker: "守護者",
+          text: "古書藏於霧中，你願以何種心意交換？",
+          mood: "神秘",
+          trustDelta: 1,
+          choices: [
+            { text: "分享我一路聽到的故事", next: "story" },
+            { text: "承諾守護此地", next: "oath" },
+          ],
+        },
+        village: {
+          speaker: "守護者",
+          text: "災厄源自人心。你願意先與村民對話嗎？",
+          mood: "警醒",
+          trustDelta: 0,
+          choices: [
+            { text: "願意，從他們的話中尋找答案", next: "listen" },
+            { text: "不，我將直面災厄的核心", next: "challenge" },
+          ],
+        },
+        rest: {
+          speaker: "守護者",
+          text: "旅途艱辛，休息亦是智慧。但你是否能分享一段記憶？",
+          mood: "溫柔",
+          trustDelta: 0,
+          choices: [
+            { text: "說出家鄉的味道", next: "memory" },
+            { text: "保持沉默", next: "silence" },
+          ],
+        },
+        story: {
+          speaker: "守護者",
+          text: "故事令人心安。古書願意與你同行，但必須持續學習。",
+          mood: "溫暖",
+          trustDelta: 1,
+          choices: [{ text: "接受試煉", next: "endingHope" }],
+        },
+        oath: {
+          speaker: "守護者",
+          text: "承諾有重量。若你守信，山海皆為友。",
+          mood: "莊嚴",
+          trustDelta: 2,
+          choices: [{ text: "立誓守護", next: "endingOath" }],
+        },
+        listen: {
+          speaker: "守護者",
+          text: "你願聆聽，災厄便會減弱。去吧，從話語中尋光。",
+          mood: "平靜",
+          trustDelta: 1,
+          choices: [{ text: "踏上調查之路", next: "endingListen" }],
+        },
+        challenge: {
+          speaker: "守護者",
+          text: "你的勇氣可嘉，但也需謀略。先取此符護身。",
+          mood: "激昂",
+          trustDelta: -1,
+          choices: [{ text: "接下護符", next: "endingBrave" }],
+        },
+        memory: {
+          speaker: "守護者",
+          text: "記憶使人不孤單。你將在此獲得片刻安寧。",
+          mood: "柔和",
+          trustDelta: 1,
+          choices: [{ text: "安心休息", next: "endingRest" }],
+        },
+        silence: {
+          speaker: "守護者",
+          text: "沉默也是答案。你可以留下，但需更久才能前行。",
+          mood: "凝重",
+          trustDelta: -1,
+          choices: [{ text: "留宿一晚", next: "endingWait" }],
+        },
+        endingHope: {
+          speaker: "旁白",
+          text: "你帶著古書踏出祠堂，夜色如同新的篇章在你腳下展開。",
+          mood: "希望",
+          trustDelta: 0,
+          choices: [{ text: "重新開始", next: "start" }],
+        },
+        endingOath: {
+          speaker: "旁白",
+          text: "你的誓言成為山海的回聲，旅程從此不再孤單。",
+          mood: "崇敬",
+          trustDelta: 0,
+          choices: [{ text: "重新開始", next: "start" }],
+        },
+        endingListen: {
+          speaker: "旁白",
+          text: "村民的故事為你指引方向，災厄的陰影逐漸消散。",
+          mood: "安心",
+          trustDelta: 0,
+          choices: [{ text: "重新開始", next: "start" }],
+        },
+        endingBrave: {
+          speaker: "旁白",
+          text: "你高舉護符，直面風暴。新的考驗正等待著你。",
+          mood: "勇毅",
+          trustDelta: 0,
+          choices: [{ text: "重新開始", next: "start" }],
+        },
+        endingRest: {
+          speaker: "旁白",
+          text: "黎明前的休息讓你重拾力量，旅途變得更加清晰。",
+          mood: "舒緩",
+          trustDelta: 0,
+          choices: [{ text: "重新開始", next: "start" }],
+        },
+        endingWait: {
+          speaker: "旁白",
+          text: "夜風從門縫穿過，提醒你前路尚遠。你終於起身繼續前行。",
+          mood: "沉靜",
+          trustDelta: 0,
+          choices: [{ text: "重新開始", next: "start" }],
+        },
+      };
+
+      const speakerEl = document.getElementById("speaker");
+      const dialogueEl = document.getElementById("dialogue");
+      const choicesEl = document.getElementById("choices");
+      const moodEl = document.getElementById("mood");
+      const trustEl = document.getElementById("trust");
+      const restartButton = document.getElementById("restart");
+
+      let trust = 3;
+      let currentNode = "start";
+
+      const renderNode = (nodeKey) => {
+        const node = nodes[nodeKey];
+        currentNode = nodeKey;
+
+        speakerEl.textContent = node.speaker;
+        dialogueEl.textContent = node.text;
+        moodEl.textContent = node.mood;
+
+        trust = Math.max(0, trust + node.trustDelta);
+        trustEl.textContent = String(trust);
+
+        choicesEl.innerHTML = "";
+        node.choices.forEach((choice) => {
+          const button = document.createElement("button");
+          button.className = "button";
+          button.textContent = choice.text;
+          button.addEventListener("click", () => renderNode(choice.next));
+          choicesEl.appendChild(button);
+        });
+      };
+
+      restartButton.addEventListener("click", () => {
+        trust = 3;
+        renderNode("start");
+      });
+
+      renderNode(currentNode);
+    </script>
+  </body>
+</html>
