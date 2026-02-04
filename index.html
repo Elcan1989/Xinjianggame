@@ -123,30 +123,33 @@
       }
 
       .dialogue-bar {
+        position: relative; /* 核心：讓頭像可以相對它定位 */
         width: 100%;
         background: rgba(15, 23, 42, 0.92);
         border-radius: 20px 20px 0 0;
         border: 1px solid rgba(148, 163, 184, 0.3);
-        padding: 24px 32px;
+        padding: 45px 32px 24px 32px; /* 增加頂部內距，避免文字被大頭像擋住 */
         display: grid;
         gap: 18px;
+        margin-top: 50px; /* 留一點空間給突出的頭像 */
       }
 
       .dialogue-bar__row {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        gap: 20px;
-        align-items: center;
+        display: block; /* 取消原本的兩欄式排版 */
       }
 
       .portrait {
-        width: 84px;
-        height: 84px;
+        position: absolute;
+        top: -60px;    /* 讓圖片往上飄出對話框 */
+        left: 30px;    /* 靠左顯示（若想靠右可改為 right: 30px; left: auto;） */
+        width: 120px;  /* 放大尺寸 */
+        height: 120px;
         border-radius: 24px;
-        border: 2px solid rgba(148, 163, 184, 0.4);
+        border: 3px solid #fbbf24; /* 醒目的邊框 */
         overflow: hidden;
-        box-shadow: 0 12px 24px rgba(2, 6, 23, 0.4);
-        background: rgba(30, 41, 59, 0.6);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        background: rgba(30, 41, 59, 0.9);
+        z-index: 10;
       }
 
       .portrait img {
